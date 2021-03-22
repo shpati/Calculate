@@ -24,10 +24,10 @@ begin
   showsteps := true;
   ii := 0;
   if ParamCount > 0 then
-    begin
+  begin
     str := ParamStr(1);
     goto pass;
-    end;
+  end;
   again:
   str := '';
   substring := '';
@@ -38,25 +38,25 @@ begin
   pass:
   Writeln;
   for c := 1 to length(str) do
-    begin
+  begin
     if str[c] <> ';' then
       substring := substring + str[c]
-      else
-      begin;
+    else
+    begin;
       substring := cleanup(substring);
       Writeln;
       writeln('IN: ', substring);
       execute(substring, showsteps);
       substring := '';
-      end;
     end;
+  end;
   if substring <> '' then
-    begin
+  begin
     substring := cleanup(substring);
     Writeln;
     writeln('IN: ', substring);
     execute(substring, showsteps);
-    end;
+  end;
   goto again;
 end.
 

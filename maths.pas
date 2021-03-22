@@ -200,10 +200,10 @@ begin
     if ((identify(TSA[i]) = 'other') and (findvalue(variables, TSA[i]) = 0) and
       (TSA[i] <> '') and (TryStrToFloat(TSA[i], f) = false) and
       (isfunction(TSA[i]) = false)) then
-      begin
+    begin
       Result := str;
       exit;
-      end;
+    end;
   end;
 
   for i := 1 to length(str) do
@@ -289,7 +289,7 @@ begin
     end;
     if (TSA[i] = 'phi') then
     begin
-      TSA[i] := floattostr((1+sqrt(5))/2);
+      TSA[i] := floattostr((1 + sqrt(5)) / 2);
       goto verybottom;
     end;
   end;
@@ -409,51 +409,51 @@ begin
     j := i;
     Result := str;
     str := StringReplace(str, findinnerparantheses(str),
-    simplesolve(findinnerparantheses(str)), [rfReplaceAll]);
+      simplesolve(findinnerparantheses(str)), [rfReplaceAll]);
     TSA := StringtoTSA(str);
     for i := 1 to length(str) do
     begin
-    if i = 1 then
-    begin
-      if ((TSA[1] = '(') and (TryStrToFloat(TSA[2], f) = true))
-        and (TSA[3] = ')') then
+      if i = 1 then
       begin
-        TSA[1] := ' ';
-        TSA[3] := ' ';
+        if ((TSA[1] = '(') and (TryStrToFloat(TSA[2], f) = true))
+          and (TSA[3] = ')') then
+        begin
+          TSA[1] := ' ';
+          TSA[3] := ' ';
+        end;
+        if ((TSA[1] = '(') and (TSA[2] = '-') and (TryStrToFloat(TSA[3], f) = true))
+          and (TSA[4] = ')') then
+        begin
+          TSA[1] := ' ';
+          TSA[4] := ' ';
+        end;
+        if ((TSA[1] = '-') and (TSA[2] = '(') and (TryStrToFloat(TSA[3], f) = true))
+          and (TSA[4] = ')') then
+        begin
+          TSA[2] := ' ';
+          TSA[4] := ' ';
+        end;
       end;
-      if ((TSA[1] = '(') and (TSA[2] = '-') and (TryStrToFloat(TSA[3], f) = true))
-        and (TSA[4] = ')') then
+      if i > 1 then
       begin
-        TSA[1] := ' ';
-        TSA[4] := ' ';
-      end;
-      if ((TSA[1] = '-') and (TSA[2] = '(') and (TryStrToFloat(TSA[3], f) = true))
-        and (TSA[4] = ')') then
-      begin
-        TSA[2] := ' ';
-        TSA[4] := ' ';
-      end;
-    end;
-    if i > 1 then
-    begin
-      if (TSA[i] = '(') and (TryStrToFloat(TSA[i + 1], f) = true)
-        and (TSA[i + 2] = ')') and (isfunction(TSA[i - 1]) = false) then
-      begin
-        TSA[i] := ' ';
-        TSA[i + 2] := ' ';
-      end;
-      if (TSA[i] = '(') and (TSA[i + 1] = '-') and (TryStrToFloat(TSA[i + 2], f) = true)
-        and (TSA[i + 3] = ')') and (isfunction(TSA[i - 1]) = false) then
-      begin
-        TSA[i] := ' ';
-        TSA[i + 3] := ' ';
-      end;
-      if (TSA[i] = '-') and (TSA[i + 1] = '(') and (TryStrToFloat(TSA[i + 2], f) = true)
-        and (TSA[i + 3] = ')') and (isfunction(TSA[i - 1]) = false) then
-      begin
-        TSA[i + 1] := ' ';
-        TSA[i + 3] := ' ';
-      end;
+        if (TSA[i] = '(') and (TryStrToFloat(TSA[i + 1], f) = true)
+          and (TSA[i + 2] = ')') and (isfunction(TSA[i - 1]) = false) then
+        begin
+          TSA[i] := ' ';
+          TSA[i + 2] := ' ';
+        end;
+        if (TSA[i] = '(') and (TSA[i + 1] = '-') and (TryStrToFloat(TSA[i + 2], f) = true)
+          and (TSA[i + 3] = ')') and (isfunction(TSA[i - 1]) = false) then
+        begin
+          TSA[i] := ' ';
+          TSA[i + 3] := ' ';
+        end;
+        if (TSA[i] = '-') and (TSA[i + 1] = '(') and (TryStrToFloat(TSA[i + 2], f) = true)
+          and (TSA[i + 3] = ')') and (isfunction(TSA[i - 1]) = false) then
+        begin
+          TSA[i + 1] := ' ';
+          TSA[i + 3] := ' ';
+        end;
       end;
     end;
     i := j;
@@ -516,11 +516,11 @@ begin
     end;
 
     if (AnsiLowerCase(TSA[1]) = 'exit') or (AnsiLowerCase(TSA[1]) = 'quit') then
-    Halt;
+      Halt;
     if AnsiLowerCase(TSA[1]) = 'help' then
     begin
-    help;
-    exit;
+      help;
+      exit;
     end;
     if AnsiLowerCase(TSA[1]) = 'variables' then
     begin
@@ -546,17 +546,17 @@ end;
 
 procedure help;
 begin
-Writeln;
-writeln(' >> The supported functions are: sin, cos, tan, exp, ln, log, sqrt.');
-writeln(' >> The following constants are included: pi=3.141...; phi=1.618...');
-Writeln(' >> You can assign up to 256 variables of your own. ');
-Writeln(' >> To view the variables type VARIABLES.');
-Writeln(' >> To clear the variables type RESET.');
-Writeln(' >> To exit the program type EXIT.');
-Writeln;
-Writeln(' >> You can enter multiple expressions at once separating them by ";"');
-Writeln(' >> For example:');
-Writeln(' >> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
+  Writeln;
+  writeln(' >> The supported functions are: sin, cos, tan, exp, ln, log, sqrt.');
+  writeln(' >> The following constants are included: pi=3.141...; phi=1.618...');
+  Writeln(' >> You can assign up to 256 variables of your own. ');
+  Writeln(' >> To view the variables type VARIABLES.');
+  Writeln(' >> To clear the variables type RESET.');
+  Writeln(' >> To exit the program type EXIT.');
+  Writeln;
+  Writeln(' >> You can enter multiple expressions at once separating them by ";"');
+  Writeln(' >> For example:');
+  Writeln(' >> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
 
 end;
 end.
