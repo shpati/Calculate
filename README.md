@@ -2,6 +2,8 @@
 Calculate is small console program for making calculations and displaying the sequence of operations.
 The program can be used as an educational tool for teaching students how to perform arithmetic operations.  
 
+![Calculate](Calculate.png "Calculate")
+
 Some of the program features are:
 - Displays the sequence of the operations that it performs.
 - It supports these functions: sin, cos, tan, exp, ln, log, sqrt.
