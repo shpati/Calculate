@@ -10,18 +10,18 @@ Some of the program features are:
 - Recognizes multiple expressions at once if they are separated them by semicolons.
   
   Example 1: 
-  >> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
+  `>> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');`
   
   Example 2:
-  >> a=1;exp(1)
+  `>> a=1;exp(1)`
 
 - You can also enter the expression to be calculated as a command line argument when calling the program:
 
   Example 1:
-  calculate.exe a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
+  `calculate.exe a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');`
 
-  Example 2
-  calculate a=1;exp(1)
+  Example 2:
+  `calculate a=1;exp(1)`
 
 
 Calculate 1.0.0. (c) Copyright Shpati Koleka MMXXI - MIT License
