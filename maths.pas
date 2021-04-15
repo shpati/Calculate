@@ -188,7 +188,7 @@ label
   bottom, verybottom;
 begin
   TSA := StringtoTSA(str);
-
+  if TSA[1] = '--' then goto verybottom;
   for i := 1 to length(str) do
   begin
     if (identify(TSA[i]) = 'other') and (findvalue(variables, TSA[i]) <> 0) and
