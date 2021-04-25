@@ -6,7 +6,6 @@ uses
 
 var
   str, substring: string;
-  showsteps: boolean;
   c: integer;
 label
   again, pass;
@@ -21,8 +20,8 @@ begin
   Writeln;
   Writeln('Please enter below the expression you would like to calculate.');
   Writeln('You can enter multiple expressions at once separating them by semicolon.');
-  showsteps := true;
   ii := 0;
+  ans := '0';
   if ParamCount > 0 then
   begin
     str := ParamStr(1);
@@ -46,7 +45,7 @@ begin
       substring := cleanup(substring);
       Writeln;
       writeln('IN: ', substring);
-      execute(substring, showsteps);
+      execute(substring);
       substring := '';
     end;
   end;
@@ -55,7 +54,7 @@ begin
     substring := cleanup(substring);
     Writeln;
     writeln('IN: ', substring);
-    execute(substring, showsteps);
+    execute(substring);
   end;
   goto again;
 end.

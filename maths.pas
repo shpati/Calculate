@@ -18,12 +18,13 @@ function findinnerparantheses(str: string): string;
 function simplesolve(str: string): string;
 function solveall(str: string; showsteps: boolean): string;
 function cleararray(arr: TStringArray): TStringArray;
-function execute(str: string; showsteps: boolean): string;
+function execute(str: string): string;
 procedure help;
 
 var
   TSA, variables, solutions: TStringArray;
   ii: integer;
+  ans: string;
 
 implementation
 
@@ -81,7 +82,7 @@ end;
 function isfunction(str: string): boolean;
 begin
   Result := AnsiMatchStr(AnsiLowerCase(str), ['sin', 'cos', 'tan', 'exp', 'ln',
-    'log', 'sqrt', 'pi', 'phi', 'help', 'variables', 'exit', 'quit']);
+    'log', 'sqrt', 'pi', 'phi', 'help', 'variables', 'exit', 'quit', 'ans']);
 end;
 
 function StringtoTSA(str: string): TStringArray;
@@ -292,6 +293,11 @@ begin
       TSA[i] := floattostr((1 + sqrt(5)) / 2);
       goto verybottom;
     end;
+    if (TSA[i] = 'ans') then
+    begin
+      TSA[i] := ans;
+      goto verybottom;
+    end;
   end;
 
   for i := length(str) downto 1 do
@@ -486,7 +492,7 @@ begin
     Result[i] := '';
 end;
 
-function execute(str: string; showsteps: boolean): string;
+function execute(str: string): string;
 var
   n, j: integer;
 begin
@@ -510,7 +516,7 @@ begin
       TSA[2] := ' ';
       str := TSAtoString(TSA);
       str := StringReplace(str, ' ', '', [rfReplaceAll]);
-      solutions[ii] := solveall(str, showsteps);
+      solutions[ii] := solveall(str, true);
       result := variables[ii] + '=' + solutions[ii];
       exit;
     end;
@@ -539,7 +545,8 @@ begin
       Writeln('The variables values are now cleared!');
       exit;
     end;
-    str := solveall(str, showsteps);
+    str := solveall(str, true);
+    ans := str;
     Result := str;
   end;
 end;
