@@ -20,6 +20,7 @@ begin
   Writeln;
   Writeln('Please enter below the expression you would like to calculate.');
   Writeln('You can enter multiple expressions at once separating them by semicolon.');
+  DecimalSeparator := '.';
   ii := 0;
   ans := '0';
   if ParamCount > 0 then
