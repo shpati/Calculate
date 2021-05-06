@@ -33,7 +33,8 @@ var
   i: integer;
 begin
   str := StringReplace(str, ' ', '', [rfReplaceAll]);
-  str := StringReplace(str, ',', '.', [rfReplaceAll]);
+  str := StringReplace(str, ',', DecimalSeparator, [rfReplaceAll]);
+  str := StringReplace(str, '.', DecimalSeparator, [rfReplaceAll]);
   TSA := StringtoTSA(str);
   for i := 1 to High(TSA) do
     if (identify(TSA[i]) = 'other') and (isfunction(TSA[i]) = false) then
