@@ -209,9 +209,9 @@ begin
   if (str[1] = '+') then Delete(str, 1, 1);
   if (str[1] = '/') or (str[1] = '*') or (str[1] = '^') then
   begin
-  Writeln;
-  Writeln('ERROR: Expression input error');
-  System.Exit;
+    Writeln;
+    Writeln('ERROR: Expression input error');
+    System.Exit;
   end;
   TSA := StringtoTSA(str);
   if TSA[1] = '--' then goto verybottom;
@@ -502,10 +502,10 @@ begin
     str := simplesolve(str);
     if str = '' then Exit;
     if Result <> str then
-      begin
-        if showsteps = true then Writeln('#', i, ' : ', str);
-        goto top;
-      end;
+    begin
+      if showsteps = true then Writeln('#', i, ' : ', str);
+      goto top;
+    end;
   end;
   Writeln('OUT: ', str);
 end;
@@ -525,6 +525,8 @@ begin
   str := cleanup(str);
   if str = check(str) then
   begin
+    Writeln;
+    writeln(' IN: ', str);
     TSA := StringtoTSA(str);
     if isfunction(TSA[1]) and (TSA[2] = '=') then
     begin

@@ -6,7 +6,7 @@ uses
 
 var
   str, substring: string;
-  show: boolean;
+  show: boolean = false;
   c: integer;
 label
   again, pass;
@@ -27,22 +27,22 @@ begin
     str := ParamStr(1);
     if AnsiLowerCase(str) = 'filein' then
     begin
-    if not FileExists(ParamStr(2)) then
-    begin
-    Writeln;
-    Writeln('ERROR: File not found');
-    Halt;
-    end;
-    str := loadtextfromfile(ParamStr(2));
-    str := StringReplace(str, sLineBreak, '', [rfReplaceAll]);
-    Writeln;
-    Writeln('Input file (',ParamStr(2),') contents: ');
-    Write(str);
+      if not FileExists(ParamStr(2)) then
+      begin
+        Writeln;
+        Writeln('ERROR: File not found');
+        Halt;
+      end;
+      str := loadtextfromfile(ParamStr(2));
+      str := StringReplace(str, sLineBreak, '', [rfReplaceAll]);
+      Writeln;
+      Writeln('Input file (', ParamStr(2), ') contents: ');
+      Write(str);
     end;
     if AnsiLowerCase(str) = 'showsteps' then
     begin
-    show := true;
-    str := ParamStr(2);
+      show := true;
+      str := ParamStr(2);
     end;
     goto pass;
   end;
@@ -51,29 +51,29 @@ begin
   str := '';
   substring := '';
   Writeln;
-  Write(' >> ');
+  Write('  >> ');
   Readln(str);
   str := AnsiLowerCase(str);
   if Copy(str, 0, 7) = 'filein ' then
   begin
-  str := StringReplace(str, 'filein ', '', [rfReplaceAll]);
-  str := StringReplace(str, ' ', '', [rfReplaceAll]);
-  if not FileExists(str) then
+    str := StringReplace(str, 'filein ', '', [rfReplaceAll]);
+    str := StringReplace(str, ' ', '', [rfReplaceAll]);
+    if not FileExists(str) then
     begin
-    Writeln;
-    Writeln('ERROR: File not found');
-    Halt;
+      Writeln;
+      Writeln('ERROR: File not found');
+      Halt;
     end;
-  Writeln;
-  Writeln('Input file (',str,') contents: ');
-  str := loadtextfromfile(str);
-  str := StringReplace(str, sLineBreak, '', [rfReplaceAll]);
-  Write(str);
+    Writeln;
+    Writeln('Input file (', str, ') contents: ');
+    str := loadtextfromfile(str);
+    str := StringReplace(str, sLineBreak, '', [rfReplaceAll]);
+    Write(str);
   end;
   if Copy(str, 0, 10) = 'showsteps ' then
   begin
-  show := true;
-  str := StringReplace(str, 'showsteps ', '', [rfReplaceAll]);
+    show := true;
+    str := StringReplace(str, 'showsteps ', '', [rfReplaceAll]);
   end;
   pass:
   Writeln;
@@ -85,8 +85,6 @@ begin
     else
     begin;
       substring := cleanup(substring);
-      Writeln;
-      writeln('IN : ', substring);
       execute(substring, show);
       substring := '';
     end;
