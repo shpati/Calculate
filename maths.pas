@@ -11,6 +11,7 @@ function cleanup(str: string): string;
 function check(str: string): string;
 function identify(element: string): string;
 function isfunction(str: string): boolean;
+function loadtextfromFile(const FileName: string): string;
 function StringtoTSA(str: string): TStringArray;
 function TSAtoString(arr: TStringArray): string;
 function findvalue(arr: TStringArray; str: string): integer;
@@ -18,7 +19,7 @@ function findinnerparantheses(str: string): string;
 function simplesolve(str: string): string;
 function solveall(str: string; showsteps: boolean): string;
 function cleararray(arr: TStringArray): TStringArray;
-function execute(str: string): string;
+function execute(str: string; show: boolean): string;
 procedure help;
 
 var
@@ -35,6 +36,7 @@ begin
   str := StringReplace(str, ' ', '', [rfReplaceAll]);
   str := StringReplace(str, ',', DecimalSeparator, [rfReplaceAll]);
   str := StringReplace(str, '.', DecimalSeparator, [rfReplaceAll]);
+  str := StringReplace(str, '**', '^', [rfReplaceAll]);
   TSA := StringtoTSA(str);
   for i := 1 to High(TSA) do
     if (identify(TSA[i]) = 'other') and (isfunction(TSA[i]) = false) then
@@ -57,13 +59,13 @@ begin
     if identify(str[i]) = 'r.p' then dec(b);
     if b < 0 then
     begin
-      writeln('Error: Closing parenthesis was used before opening parenthesis.');
+      writeln('ERROR: Closing parenthesis was used before opening parenthesis.');
       exit;
     end;
   end;
   if b <> 0 then
   begin
-    writeln('Error: The number of opening and closing parentheses do not match.');
+    writeln('ERROR: The number of opening and closing parentheses do not match.');
     exit;
   end;
   Result := str;
@@ -86,6 +88,20 @@ begin
     'log', 'sqrt', 'pi', 'phi', 'help', 'variables', 'exit', 'quit', 'ans']);
 end;
 
+function loadtextfromfile(const FileName: string): string;
+var
+  SL: TStringList;
+begin
+  Result := '';
+  SL := TStringList.Create;
+  try
+    SL.LoadFromFile(FileName);
+    Result := SL.Text;
+  finally
+    SL.Free;
+  end;
+end;
+
 function StringtoTSA(str: string): TStringArray;
 var
   i, j: integer;
@@ -96,6 +112,7 @@ begin
   for i := 2 to Length(str) do
   begin
     if ((identify(str[i - 1]) = 'number') and (identify(str[i]) = 'number')) or
+      ((identify(str[i - 1]) = 'other') and (identify(str[i]) = 'number')) or
       ((identify(str[i - 1]) = 'other') and (identify(str[i]) = 'other')) or
       ((identify(str[i - 1]) = 'operator') and (identify(str[i]) = 'operator'))
       then
@@ -189,6 +206,13 @@ var
 label
   bottom, verybottom;
 begin
+  if (str[1] = '+') then Delete(str, 1, 1);
+  if (str[1] = '/') or (str[1] = '*') or (str[1] = '^') then
+  begin
+  Writeln;
+  Writeln('ERROR: Expression input error');
+  System.Exit;
+  end;
   TSA := StringtoTSA(str);
   if TSA[1] = '--' then goto verybottom;
   for i := 1 to length(str) do
@@ -207,6 +231,8 @@ begin
       exit;
     end;
   end;
+
+  // Functions
 
   for i := 1 to length(str) do
   begin
@@ -300,6 +326,8 @@ begin
       goto verybottom;
     end;
   end;
+
+  // Operators
 
   for i := length(str) downto 1 do
     if (TSA[i] = '^') or (TSA[i] = '^-') then
@@ -396,8 +424,6 @@ begin
   str := StringReplace(str, '++', '+', [rfReplaceAll]);
   str := StringReplace(str, '+-', '-', [rfReplaceAll]);
   str := StringReplace(str, '--', '+', [rfReplaceAll]);
-  if (str[1] = '+') then Delete(str, 1, 1);
-  if (TryStrToFloat(str, f) = true) and (abs(f) < 1E-14) then str := '0';
   Result := str;
 end;
 
@@ -409,7 +435,7 @@ label
   top;
 begin
   i := 0;
-  Writeln('#', i, ': ', str);
+  if showsteps = true then Writeln('#', i, ' : ', str);
   top:
   while (AnsiContainsStr(str, '(') = true) do
   begin
@@ -468,21 +494,20 @@ begin
     if Result = str then Break;
     Result := str;
     inc(i);
-    if showsteps = true then
-      Writeln('#', i, ': ', str);
+    if showsteps = true then Writeln('#', i, ' : ', str);
   end;
   begin
     inc(i);
     Result := str;
     str := simplesolve(str);
     if str = '' then Exit;
-    if showsteps = true then
-      if Result <> str then
+    if Result <> str then
       begin
-        Writeln('#', i, ': ', str);
+        if showsteps = true then Writeln('#', i, ' : ', str);
         goto top;
       end;
   end;
+  Writeln('OUT: ', str);
 end;
 
 function cleararray(arr: TStringArray): TStringArray;
@@ -493,7 +518,7 @@ begin
     Result[i] := '';
 end;
 
-function execute(str: string): string;
+function execute(str: string; show: boolean): string;
 var
   n, j: integer;
 begin
@@ -503,7 +528,7 @@ begin
     TSA := StringtoTSA(str);
     if isfunction(TSA[1]) and (TSA[2] = '=') then
     begin
-      writeln('Error: ', TSA[1], ' is an existing function or constant. ');
+      writeln('ERROR: ', TSA[1], ' is an existing function or constant. ');
       Writeln('Please choose another variable name.');
       exit;
     end;
@@ -517,7 +542,7 @@ begin
       TSA[2] := ' ';
       str := TSAtoString(TSA);
       str := StringReplace(str, ' ', '', [rfReplaceAll]);
-      solutions[ii] := solveall(str, true);
+      solutions[ii] := solveall(str, show);
       result := variables[ii] + '=' + solutions[ii];
       exit;
     end;
@@ -546,7 +571,7 @@ begin
       Writeln('The variables values are now cleared!');
       exit;
     end;
-    str := solveall(str, true);
+    str := solveall(str, show);
     ans := str;
     Result := str;
   end;
@@ -555,16 +580,27 @@ end;
 procedure help;
 begin
   Writeln;
-  writeln(' >> The supported functions are: sin, cos, tan, exp, ln, log, sqrt.');
-  writeln(' >> The following constants are included: pi=3.141...; phi=1.618...');
+  Writeln(' >> The supported arithmetic operators are: +, -, *, /, ^');
+  Writeln(' >> The supported functions are: sin, cos, tan, exp, ln, log, sqrt.');
+  Writeln(' >> The following constants are included: pi=3.141...; phi=1.618...');
   Writeln(' >> You can assign up to 256 variables of your own. ');
-  Writeln(' >> To view the variables type VARIABLES.');
-  Writeln(' >> To clear the variables type RESET.');
+  Writeln(' >> To view the variables type VARIABLES, to clear them type RESET.');
   Writeln(' >> To exit the program type EXIT.');
   Writeln;
+  Writeln(' >> To show the steps use the SHOWSTEPS comand in front of the expression.');
+  Writeln(' >> For example: >> showsteps 2+2/2*2-2');
+  Writeln;
   Writeln(' >> You can enter multiple expressions at once separating them by ";"');
-  Writeln(' >> For example:');
-  Writeln(' >> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
+  Writeln(' >> For example: >> a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a)');
+  Writeln;
+  Writeln(' >> You can enter expressions as command-line arguments');
+  Writeln(' >> For example: calculate "a=1;b=2;c=1;x=-(b+sqrt(4*a*c-b*b))/(2*a);"');
+  Writeln;
+  Writeln(' >> You can enter expressions from an input text file using the FILEIN command');
+  Writeln(' >> For example: calculate filein input.txt');
+  Writeln;
+  Writeln(' >> You can also store the calculation results to an output file');
+  Writeln(' >> For example: calculate filein input.txt > output.txt');
 
 end;
 end.
