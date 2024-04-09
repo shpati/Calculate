@@ -1,5 +1,6 @@
 program calculate;
 {$APPTYPE CONSOLE}
+{$R calculate.res}
 
 uses
   maths in 'maths.pas', SysUtils;
@@ -12,7 +13,7 @@ label
   again, pass;
 begin
   Writeln;
-  Writeln('Calculate 1.0.1. (c) Copyright Shpati Koleka MMXXI - MIT License');
+  Writeln('Calculate 1.0.2. (c) Copyright Shpati Koleka MMXXI - MIT License');
   Writeln;
   Writeln('This calculator can show the sequence of the operations that it performs.');
   Writeln('Press Ctrl+C or type EXIT in the prompt in order to the program anytime.');

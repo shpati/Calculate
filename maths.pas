@@ -119,8 +119,15 @@ begin
       Result[j] := Result[j] + str[i]
     else
     begin
+      if ((identify(str[i - 1]) = 'number') and (identify(str[i]) = 'l.p')) or
+      ((identify(str[i - 1]) = 'r.p') and (identify(str[i]) = 'number'))
+      then
+      begin
+        inc(j);
+        Result[j] := '*';
+      end;
       inc(j);
-      Result[j] := str[i]
+      Result[j] := str[i];
     end;
   end;
   for i := j + 1 to High(TSA) do
