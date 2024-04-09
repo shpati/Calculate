@@ -26,4 +26,4 @@ Some of the program features are:
   `calculate a=1;exp(1)`
 
 
-Calculate 1.0.0. (c) Copyright Shpati Koleka MMXXI - MIT License
+Calculate 1.0 (c) Copyright Shpati Koleka MMXXI - MIT License
